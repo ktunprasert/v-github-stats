@@ -13,6 +13,28 @@ mut:
 	token string = os.getenv('GH_TOKEN')
 }
 
+// as of 2025-07-06T22:59:57 the anonymous struct requires @json attribute
+struct LanguagesResponseDTO {
+	data struct {
+		user struct {
+			respositories struct {
+				nodes []struct {
+					name      string
+					pushed_at string        @[json: 'pushedAt']
+					languages struct {
+						edges []struct {
+							size int
+							node struct {
+								name string
+							}
+						}
+					}
+				}
+			} @[json: 'repositories']
+		} @[json: 'user']
+	} @[json: 'data']
+}
+
 fn main() {
 	vdotenv.load()
 	cfg := Config{}
@@ -30,7 +52,15 @@ fn main() {
 	println(request.header)
 
 	response := request.do()!
-	println(response)
+	println(response.status_code)
+
+	if response.status_code > 200 {
+		eprintln('something went wrong - check your environment values or .env')
+		exit(1)
+	}
+
+	dto := json.decode(LanguagesResponseDTO, response.body)!
+	println(dto)
 }
 
 fn get_languages_graphql(cfg Config) string {

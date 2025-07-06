@@ -20,7 +20,7 @@ struct LanguagesResponseDTO {
 			respositories struct {
 				nodes []struct {
 					name      string
-					pushed_at string        @[json: 'pushedAt']
+					pushed_at string @[json: 'pushedAt']
 					languages struct {
 						edges []struct {
 							size int
@@ -33,6 +33,23 @@ struct LanguagesResponseDTO {
 			} @[json: 'repositories']
 		} @[json: 'user']
 	} @[json: 'data']
+}
+
+fn (dto LanguagesResponseDTO) get_languages() map[string]int {
+	mut languages := map[string]int{}
+	for repo in dto.data.user.respositories.nodes {
+		for edge in repo.languages.edges {
+			language := edge.node.name
+			size := edge.size
+			if language in languages {
+				languages[language] += size
+			} else {
+				languages[language] = size
+			}
+		}
+	}
+
+	return languages
 }
 
 fn main() {
@@ -61,6 +78,8 @@ fn main() {
 
 	dto := json.decode(LanguagesResponseDTO, response.body)!
 	println(dto)
+
+	println(dto.get_languages())
 }
 
 fn get_languages_graphql(cfg Config) string {

@@ -1,0 +1,19 @@
+{
+  user(login: "@user") {
+    repositories(first: 100, orderBy: {field: PUSHED_AT, direction: DESC}) {
+      nodes {
+        name
+        pushedAt
+        languages(first: 10) {
+          edges {
+            size
+            node {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

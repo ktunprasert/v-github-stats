@@ -1,6 +1,6 @@
 {
   user(login: "@user") {
-    repositories(first: 100, orderBy: {field: PUSHED_AT, direction: DESC}) {
+    repositories(first: 5, orderBy: {field: PUSHED_AT, direction: DESC}) {
       nodes {
         name
         pushedAt

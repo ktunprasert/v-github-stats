@@ -4,6 +4,7 @@ import graphql
 import os
 import net.http
 import json
+import log
 
 const base_url = 'https://api.github.com/graphql'
 
@@ -23,7 +24,7 @@ pub struct Client {
 pub fn (c Client) query[T](q graphql.Queryable) !T {
 	mut request := http.new_request(.post, base_url, q.to_body())
 	request.add_header(.authorization, 'Bearer ${c.token}')
-	println(request.header)
+	log.debug('request.header: ${request.header}')
 
 	response := request.do()!
 	if response.status_code > 200 {

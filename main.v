@@ -4,6 +4,7 @@ import os
 import zztkm.vdotenv
 import graphql
 import client
+import log
 
 struct Config {
 mut:
@@ -13,10 +14,9 @@ mut:
 
 fn main() {
 	vdotenv.load()
+	log.set_level(.debug)
 	// cfg := Config{}
 	c := client.new_client()
 	response := c.query[client.LanguagesResponseDTO](graphql.new_language())!
-
-	println(response)
-	println(response.get_languages())
+	log.info(response.get_languages().str())
 }

@@ -27,6 +27,8 @@ pub fn (c Client) query[T](q graphql.Queryable) !T {
 	log.debug('request.header: ${request.header}')
 
 	response := request.do()!
+	log.debug('response.body: ${response.body.limit(50)}...')
+	log.debug('response.status: ${response.status()}')
 	if response.status_code > 200 {
 		return error('something went wrong - check your environment values or .env')
 	}

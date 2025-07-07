@@ -25,8 +25,8 @@ fn main() {
 	log.set_level(.debug)
 
 	c := client.new_client()
-	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 1))!
-	languages, total := response.get_languages()
+	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 50))!
+	languages, total := response.get_languages(blacklist: [])
 	log.info(languages.str())
 
 	for key, bytes in languages {

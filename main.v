@@ -4,6 +4,7 @@ import os
 import net.http
 import zztkm.vdotenv
 import json
+import graphql
 
 const base_url = 'https://api.github.com/graphql'
 
@@ -55,14 +56,7 @@ fn (dto LanguagesResponseDTO) get_languages() map[string]int {
 fn main() {
 	vdotenv.load()
 	cfg := Config{}
-	graphql := get_languages_graphql(cfg)
-	println(graphql)
-
-	body_map := {
-		'query': graphql
-	}
-	body := json.encode(body_map)
-	println(body)
+	body := graphql.new_language().to_body()
 
 	mut request := http.new_request(.post, base_url, body)
 	request.add_header(.authorization, 'Bearer ${cfg.token}')
@@ -80,9 +74,4 @@ fn main() {
 	println(dto)
 
 	println(dto.get_languages())
-}
-
-fn get_languages_graphql(cfg Config) string {
-	user := cfg.user
-	return $tmpl('./graphql/languages.graphql')
 }

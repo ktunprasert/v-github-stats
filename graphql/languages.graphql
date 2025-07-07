@@ -1,10 +1,10 @@
 {
   user(login: "@user") {
-    repositories(first: 5, orderBy: {field: PUSHED_AT, direction: DESC}) {
+    repositories(first: @num_repos, orderBy: {field: PUSHED_AT, direction: DESC}) {
       nodes {
         name
         pushedAt
-        languages(first: 10) {
+        languages(first: @num_languages) {
           edges {
             size
             node {

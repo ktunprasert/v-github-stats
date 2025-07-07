@@ -1,0 +1,23 @@
+{
+  search(
+    query: "user:@user fork:false", # ignore forks
+    type: REPOSITORY,
+    first: @num_repos
+  ) {
+    nodes {
+      ... on Repository {
+        name
+        pushedAt
+        languages(first: @num_languages, orderBy: { field: SIZE, direction: DESC }) {
+          edges {
+            node {
+              name
+            }
+            size
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -25,13 +25,14 @@ fn main() {
 	log.set_level(.debug)
 
 	c := client.new_client()
-	response := c.query[client.LanguagesResponseDTO](graphql.new_language(num_repos: 1))!
-	languages := response.get_languages()
+	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 1))!
+	languages, total := response.get_languages()
 	log.info(languages.str())
 
-	for key, _ in languages {
-		println('lang: $key')
-		clr := cmap[key]
-		println('color: $clr')
+	for key, bytes in languages {
+		println('lang: ${key} - usage: ${bytes}')
+		println('percentage: ${f32(bytes) / f32(total) * 100:.2f}%')
+		// clr := cmap[key]
+		// println('color: ${clr}')
 	}
 }

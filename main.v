@@ -17,6 +17,6 @@ fn main() {
 	log.set_level(.debug)
 	// cfg := Config{}
 	c := client.new_client()
-	response := c.query[client.LanguagesResponseDTO](graphql.new_language())!
+	response := c.query[client.LanguagesResponseDTO](graphql.new_language(num_repos: 100))!
 	log.info(response.get_languages().str())
 }

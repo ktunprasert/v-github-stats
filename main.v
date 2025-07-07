@@ -18,7 +18,7 @@ struct Color {
 	url   string
 }
 
-const cmap = json.decode(map[string]Color, $embed_file('colors.json').to_string())!
+const cmap = json.decode(map[string]Color, $embed_file('assets/colors.json').to_string())!
 
 fn main() {
 	vdotenv.load()

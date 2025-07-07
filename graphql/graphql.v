@@ -5,6 +5,11 @@ import json
 
 const gql_lang = 'languages.graphql'
 
+pub interface Queryable {
+	query() string
+	to_body() string
+}
+
 @[params]
 pub struct LanguagesConfig {
 pub:

@@ -1,5 +1,11 @@
 module client
 
+@[params]
+pub struct LanguagesSkip {
+pub:
+	blacklist []string = ['JavaScript', 'CSS', 'PHP']
+}
+
 // as of 2025-07-06T22:59:57 the anonymous struct requires @json attribute
 pub struct SearchResponseDTO {
 	data struct {
@@ -20,14 +26,17 @@ pub struct SearchResponseDTO {
 	} @[json: 'data']
 }
 
-pub fn (dto SearchResponseDTO) get_languages() (map[string]int, int) {
+pub fn (dto SearchResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {
 	mut total := 0
 	mut languages := map[string]int{}
 	for repo in dto.data.search.nodes {
 		for edge in repo.languages.edges {
 			language := edge.node.name
-			size := edge.size
+			if language in ls.blacklist {
+				continue
+			}
 
+			size := edge.size
 			total += size
 			if language in languages {
 				languages[language] += size
@@ -59,11 +68,6 @@ pub struct LanguagesResponseDTO {
 			} @[json: 'repositories']
 		} @[json: 'user']
 	} @[json: 'data']
-}
-
-@[params]
-pub struct LanguagesSkip {
-	blacklist []string = ['JavaScript', 'CSS', 'PHP']
 }
 
 pub fn (dto LanguagesResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {

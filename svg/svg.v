@@ -1,0 +1,28 @@
+module svg
+
+import log
+import strings
+
+pub fn build_stats(ls []Language, name string, total int) string {
+	mut lang_arr := ls.clone()
+	mut offset := 20
+
+	lang_arr.sort(|a, b| b.num_bytes < a.num_bytes)
+	lang_arr.trim(10)
+	height := (lang_arr.len * 40) + 20 + 25
+	foot := height - 15
+	log.debug(lang_arr.str())
+
+	mut langs_builder := strings.new_builder(1000)
+	for lang in lang_arr {
+		langs_builder.write_string(lang.svg(total, offset))
+		offset += 40
+	}
+
+	langs := langs_builder.str()
+	log.debug(langs)
+	stats_svg := $tmpl('../assets/stats.svg')
+	log.debug(stats_svg)
+
+	return stats_svg
+}

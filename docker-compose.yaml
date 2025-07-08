@@ -1,0 +1,11 @@
+services:
+  stats:
+    build: .
+    volumes:
+      - ./public:/app/public
+    env_file: [.env]
+    environment:
+      DEBUG: true
+    ports:
+      - 8199:8199
+

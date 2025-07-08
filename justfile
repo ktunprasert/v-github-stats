@@ -14,4 +14,4 @@ build:
     docker build -t v-github-stats .
 
 run:
-    docker run --rm v-github-stats:latest
+    docker-compose up --build

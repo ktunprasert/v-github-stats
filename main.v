@@ -59,28 +59,35 @@ fn main() {
 	log.set_level(.debug)
 
 	c := client.new_client()
-	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 1))!
-	languages, total := response.get_languages(blacklist: [])
+	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 50))!
+	languages, total := response.get_languages(blacklist: ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP'])
 	log.info(languages.str())
 
 	mut langs_builder := strings.new_builder(1000)
-	mut offset := 60
+	mut offset := 20
 
+	mut lang_arr := []Language{}
 	for key, bytes in languages {
 		log.debug('lang: ${key} - usage: ${bytes}')
 		log.debug('percentage: ${f32(bytes) / f32(total) * 100:.2f}%')
 		clr := cmap[key]
-		// println('color: ${clr.color}')
 		lang := Language{
 			fill:      clr.color
 			num_bytes: bytes
 			lang:      key
 		}
 
-		item := lang.svg(total, offset)
-		log.debug(item)
+		lang_arr << lang
+	}
 
-		langs_builder.write_string(item)
+	lang_arr.sort(|a, b| b.num_bytes < a.num_bytes)
+	lang_arr.trim(10)
+	height := (lang_arr.len * 40) + 20 + 25
+	foot := height - 15
+	println(lang_arr)
+
+	for lang in lang_arr {
+		langs_builder.write_string(lang.svg(total, offset))
 		offset += 40
 	}
 

@@ -6,11 +6,15 @@ import zztkm.vdotenv
 import client
 import log
 import json
+import flag
 
+@[xdoc: 'Server for GitHub language statistics']
+@[name: 'v-gh-stats']
 struct Config {
 mut:
-	user  string = os.getenv('GH_USER')
-	token string = os.getenv('GH_TOKEN')
+	user  string = os.getenv('GH_USER') @[short: u; long: user; xdoc: 'GitHub username']
+	token string = os.getenv('GH_TOKEN') @[short: t; long: token; xdoc: 'GitHub personal access token']
+	debug bool  = os.getenv('DEBUG') == 'true' @[short: d; long: debug; xdoc: 'Enable debug mode']
 }
 
 struct Color {
@@ -22,8 +26,12 @@ const cmap = json.decode(map[string]Color, $embed_file('assets/colors.json').to_
 
 fn main() {
 	vdotenv.load()
-	log.set_level(.debug)
-	cfg := Config{}
+	cfg, _ := flag.to_struct[Config](os.args, skip: 1)!
+	if cfg.debug {
+		log.set_level(.debug)
+	}
+	log.debug(cfg.str())
+
 	c := client.new_client()
 
 	mut app := new_app(cfg, c)

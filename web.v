@@ -39,6 +39,15 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 	user := ctx.query['name'] or { app.cfg.user }
 	num_repos := ctx.query['num_repos'] or { '5' }
 	num_languages := ctx.query['num_languages'] or { '10' }
+	if num_repos.int() > 100 {
+		ctx.res.set_status(.bad_request)
+		return ctx.text('num_repos of ${num_repos} too high maximum value of 100 allowed')
+	}
+
+	if num_languages.int() > 20 {
+		ctx.res.set_status(.bad_request)
+		return ctx.text('num_languages of ${num_languages} too high maximum value of 20 allowed')
+	}
 
 	filename := '${user}-${num_repos}-${num_languages}'
 	content := app.cacher.get(filename) or { '' }
@@ -65,7 +74,9 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		svg.Language{cmap[key].color, value, key},
 	]), user)
 
-	app.cacher.cache(filename, stats_svg) or { log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')  }
+	app.cacher.cache(filename, stats_svg) or {
+		log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')
+	}
 
 	ctx.set_content_type(veb.mime_types['.svg'])
 	return ctx.text(stats_svg)

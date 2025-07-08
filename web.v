@@ -36,7 +36,7 @@ const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'P
 
 @[get]
 pub fn (app &App) index(mut ctx Ctx) veb.Result {
-	user := ctx.query['name'] or { app.cfg.user }
+	user := ctx.query['user'] or { app.cfg.user }
 	num_repos := ctx.query['num_repos'] or { '5' }
 	num_languages := ctx.query['num_languages'] or { '10' }
 	if num_repos.int() > 100 {

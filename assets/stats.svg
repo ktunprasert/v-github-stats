@@ -1,0 +1,23 @@
+<svg width="400" height="280" viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!--Background Card-->
+  <!-- <rect width="400" height="280" rx="12" fill="rgba(13, 17, 23, 0.95)" stroke="rgba(48, 54, 61, 0.5)" stroke-width="1"/> -->
+<!--Header-->
+  <text x="20" y="35" font-family="'Segoe UI', -apple-system, sans-serif" font-size="18" font-weight="600" fill="#f0f6fc">
+    📊 Language Statistics
+  </text>
+<!--Language Items-->
+  @langs
+<!--Footer Stats-->
+  <text x="20" y="265" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e">
+    Based on repository analysis • Updated recently
+  </text>
+<!--Subtle gradient overlay for depth-->
+  <!-- <defs> -->
+  <!--   <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%"> -->
+  <!--     <stop offset="0%" style="stop-color:rgba(255,255,255,0.05);stop-opacity:1"/> -->
+  <!--     <stop offset="100%" style="stop-color:rgba(255,255,255,0.01);stop-opacity:1"/> -->
+  <!--   </linearGradient> -->
+  <!-- </defs> -->
+  <!-- <rect width="400" height="280" rx="12" fill="url(#cardGradient)"/> -->
+</svg>
+

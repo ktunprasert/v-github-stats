@@ -6,6 +6,7 @@ import graphql
 import client
 import log
 import json
+import strings
 
 struct Config {
 mut:
@@ -18,6 +19,39 @@ struct Color {
 	url   string
 }
 
+const svg_width = 360
+
+struct Language {
+	fill      string
+	num_bytes int
+	// percent   f32
+	lang string
+}
+
+fn (l Language) percent(total int) f32 {
+	if total == 0 {
+		return 0.0
+	}
+	return f32(l.num_bytes) / f32(total) * 100.0
+}
+
+fn (l Language) width(total int) int {
+	if total == 0 {
+		return 0
+	}
+
+	return int(l.percent(total) * svg_width / 100.0)
+}
+
+fn (l Language) svg(total int, offset int) string {
+	fill := l.fill
+	lang := l.lang
+	percent := '${l.percent(total):.2f}'
+	width := l.width(total)
+
+	return $tmpl('./assets/lang.svg')
+}
+
 const cmap = json.decode(map[string]Color, $embed_file('assets/colors.json').to_string())!
 
 fn main() {
@@ -25,14 +59,32 @@ fn main() {
 	log.set_level(.debug)
 
 	c := client.new_client()
-	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 50))!
+	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 1))!
 	languages, total := response.get_languages(blacklist: [])
 	log.info(languages.str())
 
+	mut langs_builder := strings.new_builder(1000)
+	mut offset := 60
+
 	for key, bytes in languages {
-		println('lang: ${key} - usage: ${bytes}')
-		println('percentage: ${f32(bytes) / f32(total) * 100:.2f}%')
-		// clr := cmap[key]
-		// println('color: ${clr}')
+		log.debug('lang: ${key} - usage: ${bytes}')
+		log.debug('percentage: ${f32(bytes) / f32(total) * 100:.2f}%')
+		clr := cmap[key]
+		// println('color: ${clr.color}')
+		lang := Language{
+			fill:      clr.color
+			num_bytes: bytes
+			lang:      key
+		}
+
+		item := lang.svg(total, offset)
+		log.debug(item)
+
+		langs_builder.write_string(item)
+		offset += 40
 	}
+
+	langs := langs_builder.str()
+	log.debug(langs)
+	println($tmpl('./assets/stats.svg'))
 }

@@ -1,0 +1,7 @@
+  <g transform="translate(20, @offset)">
+    <circle cx="6" cy="6" r="6" fill="@fill"/>
+    <text x="20" y="10" font-family="'Segoe UI', -apple-system, sans-serif" font-size="14" font-weight="500" fill="#f0f6fc">@lang</text>
+    <text x="360" y="10" font-family="'Segoe UI', -apple-system, sans-serif" font-size="14" fill="#8b949e" text-anchor="end">@percent%</text>
+    <rect x="0" y="18" width="360" height="4" rx="2" fill="rgba(48, 54, 61, 0.8)"/>
+    <rect x="0" y="18" width="@width" height="4" rx="2" fill="@fill"/>
+  </g>

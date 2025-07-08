@@ -24,7 +24,7 @@ pub struct Client {
 pub fn (c Client) query[T](q graphql.Queryable) !T {
 	mut request := http.new_request(.post, base_url, q.to_body())
 	request.add_header(.authorization, 'Bearer ${c.token}')
-	log.debug('request.header: ${request.header}')
+	log.debug('request.header: ${request.header.str().limit(12)}')
 
 	response := request.do()!
 	log.debug('response.body: ${response.body.limit(50)}...')

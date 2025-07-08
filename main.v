@@ -17,6 +17,10 @@ mut:
 	debug bool  = os.getenv('DEBUG') == 'true' @[short: d; long: debug; xdoc: 'Enable debug mode']
 }
 
+fn (c Config) str() string {
+	return 'user: ${c.user}, token ${c.token.limit(10)}..., debug: ${c.debug}'
+}
+
 struct Color {
 	color string
 	url   string

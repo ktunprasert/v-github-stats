@@ -1,5 +1,6 @@
 alias b := build
 alias r := run
+alias c := clear
 
 flags := "-d use_openssl"
 
@@ -15,3 +16,6 @@ build:
 
 run:
     docker-compose up --build
+
+clear:
+    rm public/*.svg

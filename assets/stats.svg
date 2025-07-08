@@ -8,6 +8,9 @@
     <text x="20" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e">
         @@@name
     </text>
+    <text x="390" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" text-anchor="end" fill="#8b949e">
+        @date
+    </text>
   </a>
   <!-- <text x="20" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e"> -->
   <!--   Based on repository analysis • Updated recently -->

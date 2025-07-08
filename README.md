@@ -61,6 +61,7 @@ docker run -p 8199:8199 -e GH_USER=username -e GH_TOKEN=token v-gh-stats
 just          # Run in baremetal
 just run      # Run with docker-compose
 just build    # Prepares the binary and build the image
+just clear    # Clear cached files
 ```
 
 ## Usage

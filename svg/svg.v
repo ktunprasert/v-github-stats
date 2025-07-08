@@ -1,6 +1,7 @@
 module svg
 
 import log
+import time
 import strings
 import arrays
 
@@ -25,6 +26,7 @@ pub fn build_stats(ls []Language, name string) string {
 	}
 
 	langs := langs_builder.str()
+	date := time.now().ddmmy()
 	stats_svg := $tmpl('../assets/stats.svg')
 
 	return stats_svg

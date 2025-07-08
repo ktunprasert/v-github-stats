@@ -40,6 +40,15 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 	num_repos := ctx.query['num_repos'] or { '5' }
 	num_languages := ctx.query['num_languages'] or { '10' }
 
+	filename := '${user}-${num_repos}-${num_languages}'
+	content := app.cacher.get(filename) or { '' }
+
+	if content.len > 0 {
+		log.info('veb.index.query: cache hit for ${filename}')
+		ctx.set_content_type(veb.mime_types['.svg'])
+		return ctx.text(content)
+	}
+
 	search_query := graphql.new_search(
 		user:          user
 		num_repos:     num_repos.int()
@@ -55,6 +64,8 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 	stats_svg := svg.build_stats(maps.flat_map[string, int, svg.Language](languages, |key, value| [
 		svg.Language{cmap[key].color, value, key},
 	]), user)
+
+	app.cacher.cache(filename, stats_svg) or { log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')  }
 
 	ctx.set_content_type(veb.mime_types['.svg'])
 	return ctx.text(stats_svg)

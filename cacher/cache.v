@@ -7,7 +7,7 @@ import time
 pub struct Cacher {
 }
 
-const public = '../public'
+const public = './public'
 
 fn init() {
 	if !os.exists(public) {
@@ -17,26 +17,26 @@ fn init() {
 }
 
 pub fn (c Cacher) cache(filename string, content string) ! {
-	if os.exists(c.filename(filename)) {
+	file := c.filename(filename)
+	if os.exists(file) {
 		return error('file already exists')
 	}
 
-	log.debug('cacher: caching ${filename}')
-	os.write_file(c.filename(filename), content)!
-	log.debug('cacher: cached ${filename}.svg')
+	os.write_file(file, content)!
+	log.debug('cacher: cached ${file} OK')
 }
 
 pub fn (c Cacher) get(filename string) !string {
-	if !os.exists(c.filename(filename)) {
+	file := c.filename(filename)
+	if !os.exists(file) {
 		return error('file does not exist')
 	}
 
-	log.debug('cacher: getting ${filename}.svg')
-	content := os.read_file(c.filename(filename)) or {
+	content := os.read_file(file) or {
 		return error('failed to read file: ${err}')
 	}
 
-	log.debug('cacher: got ${filename}.svg')
+	log.debug('cacher: cache hit! got ${file}')
 	return content
 }
 

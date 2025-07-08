@@ -23,6 +23,11 @@ struct Ctx {
 	veb.Context
 }
 
+pub fn (mut ctx Ctx) not_found() veb.Result {
+	ctx.res.set_status(.not_found)
+	return ctx.html('Page not found!')
+}
+
 const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP', 'MDX']
 
 @[get]

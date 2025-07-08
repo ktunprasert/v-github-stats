@@ -13,10 +13,11 @@ import cacher
 @[name: 'v-gh-stats']
 struct Config {
 mut:
-	user  string = os.getenv('GH_USER') @[long: user; short: u; xdoc: 'GitHub username']
-	token string = os.getenv('GH_TOKEN') @[long: token; short: t; xdoc: 'GitHub personal access token']
-	debug bool   = os.getenv('DEBUG') == 'true'   @[long: debug; short: d; xdoc: 'Enable debug mode']
-	cache bool   = os.getenv('CACHE') == 'true'   @[long: cache; short: c; xdoc: 'Enable caching']
+	show_help bool   @[long: help; short: h; xdoc: 'Show this help message']
+	user      string = os.getenv('GH_USER') @[long: user; short: u; xdoc: 'GitHub username env \$GH_USER']
+	token     string = os.getenv('GH_TOKEN') @[long: token; short: t; xdoc: 'GitHub personal access token env \$GH_TOKEN']
+	debug     bool   = os.getenv('DEBUG') == 'true'   @[long: debug; short: d; xdoc: 'Enable debug mode env \$DEBUG']
+	cache     bool   = os.getenv('CACHE') == 'true'   @[long: cache; short: c; xdoc: 'Enable caching env \$CACHE']
 }
 
 fn (c Config) str() string {
@@ -37,6 +38,11 @@ fn main() {
 		log.set_level(.debug)
 	}
 	log.debug(cfg.str())
+
+	if cfg.show_help {
+		println(flag.to_doc[Config]()!)
+		return
+	}
 
 	clnt := client.new_client()
 	cache := cacher.Cacher{cfg.cache}

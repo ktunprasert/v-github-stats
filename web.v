@@ -6,17 +6,20 @@ import graphql
 import client
 import svg
 import maps
+import cacher
 
 struct App {
 	veb.Middleware[Ctx]
 	cfg    Config
 	client client.Client
+	cacher cacher.Cacher
 }
 
-fn new_app(cfg Config, c client.Client) &App {
+fn new_app(cfg Config, c client.Client, cache cacher.Cacher) &App {
 	return &App{
 		cfg:    cfg
 		client: c
+		cacher: cache
 	}
 }
 

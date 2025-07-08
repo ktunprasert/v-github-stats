@@ -7,6 +7,7 @@ import client
 import log
 import json
 import flag
+import cacher
 
 @[xdoc: 'Server for GitHub language statistics']
 @[name: 'v-gh-stats']
@@ -36,9 +37,10 @@ fn main() {
 	}
 	log.debug(cfg.str())
 
-	c := client.new_client()
+	clnt := client.new_client()
+	cache := cacher.Cacher{}
 
-	mut app := new_app(cfg, c)
+	mut app := new_app(cfg, clnt, cache)
 	app.use(
 		handler: fn (mut ctx Ctx) bool {
 			log.info('ctx.query: ${ctx.query}')

@@ -7,7 +7,7 @@ pub struct Edge {
 	}
 }
 
-fn (edges []Edge) score(ls LanguagesSkip) (map[string]int, int) {
+fn (edges []Edge) score(ls LanguagesSkip) map[string]int {
 	mut bytes_map := map[string]int{}
 	mut count_weight := map[string]int{}
 	for edge in edges {
@@ -26,13 +26,11 @@ fn (edges []Edge) score(ls LanguagesSkip) (map[string]int, int) {
 		}
 	}
 
-	mut total := 0
 	mut languages := map[string]int{}
 	for key, value in bytes_map {
 		score := value / count_weight[key]
-		total += score
 		languages[key] = score
 	}
 
-	return languages, total
+	return languages
 }

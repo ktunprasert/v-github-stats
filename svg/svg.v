@@ -2,12 +2,15 @@ module svg
 
 import log
 import strings
+import arrays
 
-pub fn build_stats(ls []Language, name string, total int) string {
+pub fn build_stats(ls []Language, name string) !string {
+	total := arrays.sum(ls.map(it.score))!
+
 	mut lang_arr := ls.clone()
 	mut offset := 20
 
-	lang_arr.sort(|a, b| b.num_bytes < a.num_bytes)
+	lang_arr.sort(|a, b| b.score < a.score)
 	lang_arr.trim(10)
 	height := (lang_arr.len * 40) + 20 + 25
 	foot := height - 15

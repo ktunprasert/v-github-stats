@@ -4,9 +4,14 @@
 <!--Language Items-->
   @langs
 <!--Footer Stats-->
-  <text x="20" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e">
-    Based on repository analysis • Updated recently
-  </text>
+  <a href="https://github.com/@name" target="_blank">
+    <text x="20" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e">
+        @@@name
+    </text>
+  </a>
+  <!-- <text x="20" y="@foot" font-family="'Segoe UI', -apple-system, sans-serif" font-size="12" fill="#8b949e"> -->
+  <!--   Based on repository analysis • Updated recently -->
+  <!-- </text> -->
 <!--Subtle gradient overlay for depth-->
   <defs>
     <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">

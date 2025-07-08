@@ -1,7 +1,7 @@
 module graphql
 
 import os
-import json
+import x.json2
 
 const gql_lang = 'languages.graphql'
 const gql_search = 'search.graphql'
@@ -42,7 +42,7 @@ pub fn (l Search) query() string {
 }
 
 pub fn (l Search) to_body() string {
-	return json.encode({
+	return json2.encode({
 		'query': l.query()
 	})
 }
@@ -70,7 +70,7 @@ fn (l Languages) query() string {
 }
 
 pub fn (l Languages) to_body() string {
-	return json.encode({
+	return json2.encode({
 		'query': l.query()
 	})
 }

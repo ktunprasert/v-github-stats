@@ -1,5 +1,7 @@
 module client
 
+import arrays
+
 @[params]
 pub struct LanguagesSkip {
 pub:
@@ -14,39 +16,19 @@ pub struct SearchResponseDTO {
 				name      string
 				pushed_at string @[json: 'pushedAt']
 				languages struct {
-					edges []struct {
-						size int
-						node struct {
-							name string
-						}
-					}
+					edges []Edge
 				}
 			}
 		} @[json: 'search']
 	} @[json: 'data']
 }
 
+pub fn (dto SearchResponseDTO) edges() []Edge {
+	return arrays.flatten(dto.data.search.nodes.map(it.languages.edges))
+}
+
 pub fn (dto SearchResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {
-	mut total := 0
-	mut languages := map[string]int{}
-	for repo in dto.data.search.nodes {
-		for edge in repo.languages.edges {
-			language := edge.node.name
-			if language in ls.blacklist {
-				continue
-			}
-
-			size := edge.size
-			total += size
-			if language in languages {
-				languages[language] += size
-			} else {
-				languages[language] = size
-			}
-		}
-	}
-
-	return languages, total
+	return dto.edges().score(ls)
 }
 
 pub struct LanguagesResponseDTO {
@@ -57,12 +39,7 @@ pub struct LanguagesResponseDTO {
 					name      string
 					pushed_at string @[json: 'pushedAt']
 					languages struct {
-						edges []struct {
-							size int
-							node struct {
-								name string
-							}
-						}
+						edges []Edge
 					}
 				}
 			} @[json: 'repositories']
@@ -70,26 +47,10 @@ pub struct LanguagesResponseDTO {
 	} @[json: 'data']
 }
 
+pub fn (dto LanguagesResponseDTO) edge() []Edge {
+	return arrays.flatten(dto.data.user.respositories.nodes.map(it.languages.edges))
+}
+
 pub fn (dto LanguagesResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {
-	mut total := 0
-	mut languages := map[string]int{}
-	for repo in dto.data.user.respositories.nodes {
-		for edge in repo.languages.edges {
-			language := edge.node.name
-			if language in ls.blacklist {
-				continue
-			}
-
-			size := edge.size
-
-			total += size
-			if language in languages {
-				languages[language] += size
-			} else {
-				languages[language] = size
-			}
-		}
-	}
-
-	return languages, total
+	return dto.edge().score(ls)
 }

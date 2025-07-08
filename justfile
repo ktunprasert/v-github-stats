@@ -11,7 +11,7 @@ build:
     @echo "Building V project"
     v -prod -compress -d use_openssl -cflags '-static -Os -flto' -o main .
     @echo "Building Docker image"
-    docker build -t v-github-stats .
+    docker-compose build
 
 run:
     docker-compose up --build

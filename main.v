@@ -57,10 +57,11 @@ const cmap = json.decode(map[string]Color, $embed_file('assets/colors.json').to_
 fn main() {
 	vdotenv.load()
 	log.set_level(.debug)
+	cfg := Config{}
 
 	c := client.new_client()
 	response := c.query[client.SearchResponseDTO](graphql.new_search(num_repos: 50))!
-	languages, total := response.get_languages(blacklist: ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP'])
+	languages, total := response.get_languages(blacklist: ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP', 'MDX'])
 	log.info(languages.str())
 
 	mut langs_builder := strings.new_builder(1000)
@@ -93,5 +94,12 @@ fn main() {
 
 	langs := langs_builder.str()
 	log.debug(langs)
-	println($tmpl('./assets/stats.svg'))
+	name := cfg.user
+	stats_svg := $tmpl('./assets/stats.svg')
+	log.debug(stats_svg)
+
+	os.write_file('stats.svg', stats_svg) or {
+		log.error('Failed to write stats.svg: ${err}')
+		return
+	}
 }

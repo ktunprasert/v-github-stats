@@ -32,7 +32,7 @@ DEBUG=false
 
 ```bash
 # Clone and build
-git clone <repository-url>
+git clone https://github.com/ktunprasert/v-github-stats
 cd v-gh-stats
 # If Linux you have to use `-d use_openssl`
 v -d use_openssl run .

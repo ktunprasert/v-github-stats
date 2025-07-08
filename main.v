@@ -26,6 +26,13 @@ fn main() {
 	cfg := Config{}
 	c := client.new_client()
 
-	mut app := &App{cfg, c}
+	mut app := new_app(cfg, c)
+	app.use(
+		handler: fn (mut ctx Ctx) bool {
+			log.info('ctx.query: ${ctx.query}')
+			log.info('ctx.url: ${ctx.req.host}${ctx.req.url}')
+			return true
+		}
+	)
 	veb.run[App, Ctx](mut app, 8199)
 }

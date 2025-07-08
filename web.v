@@ -7,8 +7,16 @@ import svg
 import maps
 
 struct App {
+	veb.Middleware[Ctx]
 	cfg    Config
 	client client.Client
+}
+
+fn new_app(cfg Config, c client.Client) &App {
+	return &App{
+		cfg:    cfg
+		client: c
+	}
 }
 
 struct Ctx {

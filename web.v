@@ -1,6 +1,7 @@
 module main
 
 import veb
+import log
 import graphql
 import client
 import svg
@@ -32,15 +33,16 @@ const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'P
 
 @[get]
 pub fn (app &App) index(mut ctx Ctx) veb.Result {
-	user_name := ctx.query['name'] or { app.cfg.user }
+	user := ctx.query['name'] or { app.cfg.user }
 	num_repos := ctx.query['num_repos'] or { '5' }
 	num_languages := ctx.query['num_languages'] or { '10' }
 
 	search_query := graphql.new_search(
-		user:          user_name
+		user:          user
 		num_repos:     num_repos.int()
 		num_languages: num_languages.int()
 	)
+	log.info('veb.index.query: (user: ${user}, num_repos: ${num_repos}, num_languages: ${num_languages}) ')
 
 	resp := app.client.query[client.SearchResponseDTO](search_query) or {
 		return ctx.text('Error fetching data: ${err}')
@@ -49,7 +51,7 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 
 	stats_svg := svg.build_stats(maps.flat_map[string, int, svg.Language](languages, |key, value| [
 		svg.Language{cmap[key].color, value, key},
-	]), user_name)
+	]), user)
 
 	ctx.set_content_type(veb.mime_types['.svg'])
 	return ctx.text(stats_svg)

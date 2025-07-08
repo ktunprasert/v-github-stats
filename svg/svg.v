@@ -14,7 +14,9 @@ pub fn build_stats(ls []Language, name string) string {
 	lang_arr.trim(10)
 	height := (lang_arr.len * 40) + 20 + 25
 	foot := height - 15
-	log.debug(lang_arr.map(it.lang).str())
+	log.debug('svg.langs: ${lang_arr.map(it.lang)}')
+	log.debug('svg.score: ${lang_arr.map(it.score)}')
+	log.debug('svg.percent: ${lang_arr.map(it.percent(total))}')
 
 	mut langs_builder := strings.new_builder(1000)
 	for lang in lang_arr {

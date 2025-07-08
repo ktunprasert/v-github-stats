@@ -1,11 +1,11 @@
 module main
 
+import veb
 import os
 import zztkm.vdotenv
 import client
 import log
 import json
-import veb
 
 struct Config {
 mut:
@@ -34,5 +34,6 @@ fn main() {
 			return true
 		}
 	)
+	app.use(veb.encode_gzip[Ctx]())
 	veb.run[App, Ctx](mut app, 8199)
 }

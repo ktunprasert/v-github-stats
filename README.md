@@ -2,6 +2,10 @@
 
 A simple V web server that generates SVG language statistics from GitHub repositories.
 
+![ktunprasert-35-10 2025-07-08](https://github.com/user-attachments/assets/ab4ae120-6682-4792-8871-57a0ade711ed)
+
+Currently, it's aimed for dark mode, tranlucent gradient background.
+
 ## Features
 
 - Generates SVG visualizations of programming language usage

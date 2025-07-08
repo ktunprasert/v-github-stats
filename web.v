@@ -51,6 +51,6 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		svg.Language{cmap[key].color, value, key},
 	]), user_name)
 
-	ctx.set_content_type('image/svg+xml')
+	ctx.set_content_type(veb.mime_types['.svg'])
 	return ctx.text(stats_svg)
 }

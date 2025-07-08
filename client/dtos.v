@@ -27,7 +27,7 @@ pub fn (dto SearchResponseDTO) edges() []Edge {
 	return arrays.flatten(dto.data.search.nodes.map(it.languages.edges))
 }
 
-pub fn (dto SearchResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {
+pub fn (dto SearchResponseDTO) get_languages(ls LanguagesSkip) map[string]int {
 	return dto.edges().score(ls)
 }
 
@@ -51,6 +51,6 @@ pub fn (dto LanguagesResponseDTO) edge() []Edge {
 	return arrays.flatten(dto.data.user.respositories.nodes.map(it.languages.edges))
 }
 
-pub fn (dto LanguagesResponseDTO) get_languages(ls LanguagesSkip) (map[string]int, int) {
+pub fn (dto LanguagesResponseDTO) get_languages(ls LanguagesSkip) map[string]int {
 	return dto.edge().score(ls)
 }

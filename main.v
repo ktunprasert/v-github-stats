@@ -36,7 +36,7 @@ fn main() {
 
 	stats_svg := svg.build_stats(maps.flat_map[string, int, svg.Language](languages, |key, value| [
 		svg.Language{cmap[key].color, value, key},
-	]), cfg.user)!
+	]), cfg.user)
 
 	os.write_file('stats.svg', stats_svg) or {
 		log.error('Failed to write stats.svg: ${err}')

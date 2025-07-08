@@ -4,8 +4,8 @@ import log
 import strings
 import arrays
 
-pub fn build_stats(ls []Language, name string) !string {
-	total := arrays.sum(ls.map(it.score))!
+pub fn build_stats(ls []Language, name string) string {
+	total := arrays.sum(ls.map(it.score)) or { 0 }
 
 	mut lang_arr := ls.clone()
 	mut offset := 20

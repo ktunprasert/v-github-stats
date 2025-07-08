@@ -22,5 +22,8 @@ bin/
 # vweb and database
 *.db
 *.js
+
+# custom
 stats.svg
 v-github-stats
+public/*

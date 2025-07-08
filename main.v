@@ -13,13 +13,14 @@ import cacher
 @[name: 'v-gh-stats']
 struct Config {
 mut:
-	user  string = os.getenv('GH_USER') @[short: u; long: user; xdoc: 'GitHub username']
-	token string = os.getenv('GH_TOKEN') @[short: t; long: token; xdoc: 'GitHub personal access token']
-	debug bool  = os.getenv('DEBUG') == 'true' @[short: d; long: debug; xdoc: 'Enable debug mode']
+	user  string = os.getenv('GH_USER') @[long: user; short: u; xdoc: 'GitHub username']
+	token string = os.getenv('GH_TOKEN') @[long: token; short: t; xdoc: 'GitHub personal access token']
+	debug bool   = os.getenv('DEBUG') == 'true'   @[long: debug; short: d; xdoc: 'Enable debug mode']
+	cache bool   = os.getenv('CACHE') == 'true'   @[long: cache; short: c; xdoc: 'Enable caching']
 }
 
 fn (c Config) str() string {
-	return 'user: ${c.user}, token ${c.token.limit(10)}..., debug: ${c.debug}'
+	return 'user: ${c.user}, token ${c.token.limit(10)}..., debug: ${c.debug}, cache: ${c.cache}'
 }
 
 struct Color {
@@ -38,7 +39,7 @@ fn main() {
 	log.debug(cfg.str())
 
 	clnt := client.new_client()
-	cache := cacher.Cacher{}
+	cache := cacher.Cacher{cfg.cache}
 
 	mut app := new_app(cfg, clnt, cache)
 	app.use(

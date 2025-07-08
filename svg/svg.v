@@ -14,7 +14,7 @@ pub fn build_stats(ls []Language, name string) string {
 	lang_arr.trim(10)
 	height := (lang_arr.len * 40) + 20 + 25
 	foot := height - 15
-	// log.debug(lang_arr.str())
+	log.debug(lang_arr.map(it.lang).str())
 
 	mut langs_builder := strings.new_builder(1000)
 	for lang in lang_arr {
@@ -23,9 +23,7 @@ pub fn build_stats(ls []Language, name string) string {
 	}
 
 	langs := langs_builder.str()
-	// log.debug(langs)
 	stats_svg := $tmpl('../assets/stats.svg')
-	// log.debug(stats_svg)
 
 	return stats_svg
 }

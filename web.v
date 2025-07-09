@@ -36,20 +36,23 @@ const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'P
 
 @[get]
 pub fn (app &App) index(mut ctx Ctx) veb.Result {
-	user := ctx.query['user'] or { app.cfg.user }
-	num_repos := ctx.query['num_repos'] or { '5' }
-	num_languages := ctx.query['num_languages'] or { '10' }
-	if num_repos.int() > 100 {
-		ctx.res.set_status(.bad_request)
-		return ctx.text('num_repos of ${num_repos} too high maximum value of 100 allowed')
+	mut query_cfg := graphql.LanguagesConfig{}
+	if 'user' in ctx.query {
+		query_cfg.user = ctx.query['user']
+	}
+	if 'num_repos' in ctx.query {
+		query_cfg.num_repos = ctx.query['num_repos'].int()
+	}
+	if 'num_languages' in ctx.query {
+		query_cfg.num_languages = ctx.query['num_languages'].int()
 	}
 
-	if num_languages.int() > 20 {
+	query_cfg = query_cfg.validate() or {
 		ctx.res.set_status(.bad_request)
-		return ctx.text('num_languages of ${num_languages} too high maximum value of 20 allowed')
+		return ctx.text('Invalid query parameters: ${err}')
 	}
 
-	filename := '${user}-${num_repos}-${num_languages}'
+	filename := '${query_cfg.user}-${query_cfg.num_repos}-${query_cfg.num_languages}'
 	content := app.cacher.get(filename) or { '' }
 
 	if content.len > 0 {
@@ -58,21 +61,18 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		return ctx.text(content)
 	}
 
-	search_query := graphql.new_search(
-		user:          user
-		num_repos:     num_repos.int()
-		num_languages: num_languages.int()
-	)
-	log.info('veb.index.query: (user: ${user}, num_repos: ${num_repos}, num_languages: ${num_languages}) ')
+	search_query := graphql.new_search(query_cfg)
+	log.info('veb.index.query: (user: ${query_cfg.user}, num_repos: ${query_cfg.num_repos}, num_languages: ${query_cfg.num_languages}) ')
 
 	resp := app.client.query[client.SearchResponseDTO](search_query) or {
+		ctx.res.set_status(.internal_server_error)
 		return ctx.text('Error fetching data: ${err}')
 	}
 	languages := resp.get_languages(blacklist: blacklist)
 
 	stats_svg := svg.build_stats(maps.flat_map[string, int, svg.Language](languages, |key, value| [
 		svg.Language{cmap[key].color, value, key},
-	]), user)
+	]), query_cfg.user)
 
 	app.cacher.cache(filename, stats_svg) or {
 		log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')

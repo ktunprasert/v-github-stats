@@ -13,10 +13,21 @@ pub interface Queryable {
 
 @[params]
 pub struct LanguagesConfig {
-pub:
+pub mut:
 	user          string = os.getenv('GH_USER')
 	num_repos     int    = 5
 	num_languages int    = 10
+}
+
+pub fn (l LanguagesConfig) validate() !LanguagesConfig {
+	if l.num_repos > 100 {
+		return error('num_repos of ${l.num_repos} too high, maximum value of 100 allowed')
+	}
+	if l.num_languages > 20 {
+		return error('num_languages of ${l.num_languages} too high, maximum value of 20 allowed')
+	}
+
+	return l
 }
 
 struct Search {

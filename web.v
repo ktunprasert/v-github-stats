@@ -61,7 +61,7 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		return ctx.text('Invalid query parameters: ${err}')
 	}
 
-	filename := '${query_cfg.user}-${query_cfg.num_repos}-${query_cfg.num_languages}'
+	filename := '${query_cfg.user}-${query_cfg.num_repos}-${query_cfg.num_languages}-${limit}'
 	content := app.cacher.get(filename) or { '' }
 
 	if content.len > 0 {

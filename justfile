@@ -12,9 +12,11 @@ default:
 dev:
     v -d veb_livereload watch {{flags}} run . -d -c
 
-build:
+_build:
     @echo "Building V project"
     v -prod -compress -d use_openssl -cflags '-static -Os -flto' -o main .
+
+build: _build
     @echo "Building Docker image"
     docker-compose build
 

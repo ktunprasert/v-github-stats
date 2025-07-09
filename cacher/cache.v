@@ -21,6 +21,7 @@ fn init() {
 pub fn (c Cacher) cache(filename string, content string) ! {
 	if !c.should_cache {
 		log.debug('cacher: caching is disabled')
+		return
 	}
 
 	file := c.filename(filename)
@@ -35,6 +36,7 @@ pub fn (c Cacher) cache(filename string, content string) ! {
 pub fn (c Cacher) get(filename string) !string {
 	if !c.should_cache {
 		log.debug('cacher: caching is disabled')
+		return error('caching is disabled')
 	}
 
 	file := c.filename(filename)

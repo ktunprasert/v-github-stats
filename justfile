@@ -1,12 +1,16 @@
 alias b := build
 alias r := run
 alias c := clear
+alias d := dev
 
 flags := "-d use_openssl"
 
 # flag only required for linux builds
 default:
     v {{flags}} run .
+
+dev:
+    v -d veb_livereload watch {{flags}} run . -d -c
 
 build:
     @echo "Building V project"

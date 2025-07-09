@@ -5,14 +5,20 @@ import time
 import strings
 import arrays
 
-pub fn build_stats(ls []Language, name string) string {
+@[params]
+pub struct StatsConfig {
+pub:
+	limit int = 10
+}
+
+pub fn build_stats(ls []Language, name string, sc StatsConfig) string {
 	total := arrays.sum(ls.map(it.score)) or { 0 }
 
 	mut lang_arr := ls.clone()
 	mut offset := 20
 
 	lang_arr.sort(|a, b| b.score < a.score)
-	lang_arr.trim(10)
+	lang_arr.trim(sc.limit)
 	height := (lang_arr.len * 40) + 20 + 25
 	foot := height - 15
 	log.debug('svg.langs: ${lang_arr.map(it.lang)}')

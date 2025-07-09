@@ -48,6 +48,11 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		query_cfg.num_languages = ctx.query['num_languages'].int()
 	}
 
+	mut limit := ctx.query['limit'].int()
+	if limit == 0 {
+		limit = 10
+	}
+
 	query_cfg = query_cfg.validate() or {
 		ctx.res.set_status(.bad_request)
 		return ctx.text('Invalid query parameters: ${err}')
@@ -73,7 +78,7 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 
 	stats_svg := svg.build_stats(maps.flat_map[string, int, svg.Language](languages, |key, value| [
 		svg.Language{cmap[key].color, value, key},
-	]), query_cfg.user)
+	]), query_cfg.user, limit: limit)
 
 	app.cacher.cache(filename, stats_svg) or {
 		log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')

@@ -52,6 +52,9 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 	if limit == 0 {
 		limit = 10
 	}
+	if limit > 20 {
+		return ctx.text('Invalid query parameters: limit must be less than 20')
+	}
 
 	query_cfg = query_cfg.validate() or {
 		ctx.res.set_status(.bad_request)

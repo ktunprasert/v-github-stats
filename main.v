@@ -48,13 +48,8 @@ fn main() {
 	cache := cacher.Cacher{cfg.cache}
 
 	mut app := new_app(cfg, clnt, cache)
-	app.use(
-		handler: fn (mut ctx Ctx) bool {
-			log.info('ctx.query: ${ctx.query}')
-			log.info('ctx.url: ${ctx.req.host}${ctx.req.url}')
-			return true
-		}
-	)
+	app.use(handler: request_logger)
+	app.use(handler: response_logger, after: true)
 	app.use(veb.encode_gzip[Ctx]())
 	veb.run[App, Ctx](mut app, 8199)
 }

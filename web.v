@@ -100,5 +100,6 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 
 	ctx.set_header(.expires, tomorrow.utc_string())
 	ctx.set_header(.cache_control, 'public')
+	ctx.set_content_type(veb.mime_types['.svg'])
 	return ctx.text(stats_svg)
 }

@@ -32,7 +32,8 @@ pub fn (mut ctx Ctx) not_found() veb.Result {
 	return ctx.html('Page not found!')
 }
 
-const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP', 'MDX']
+const blacklist = ['Shell', 'HTML', 'CSS', 'Dockerfile', 'Lua', 'JavaScript', 'PHP', 'MDX', 'SCSS',
+	'Less']
 
 @[get]
 pub fn (app &App) index(mut ctx Ctx) veb.Result {

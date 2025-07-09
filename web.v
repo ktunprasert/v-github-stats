@@ -7,6 +7,7 @@ import client
 import svg
 import maps
 import cacher
+import time
 
 struct App {
 	veb.Middleware[Ctx]
@@ -64,8 +65,18 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 	filename := '${query_cfg.user}-${query_cfg.num_repos}-${query_cfg.num_languages}-${limit}'
 	content := app.cacher.get(filename) or { '' }
 
+	mut now := time.now()
+	now = now.add_days(1)
+	tomorrow := time.Time{
+		day:   now.day
+		month: now.month
+		year:  now.year
+	}
+
 	if content.len > 0 {
 		log.info('veb.index.query: cache hit for ${filename}')
+		ctx.set_header(.expires, tomorrow.utc_string())
+		ctx.set_header(.cache_control, 'public')
 		ctx.set_content_type(veb.mime_types['.svg'])
 		return ctx.text(content)
 	}
@@ -87,6 +98,7 @@ pub fn (app &App) index(mut ctx Ctx) veb.Result {
 		log.error('veb.index.cacher: unable to cache ${filename}, err: ${err}')
 	}
 
-	ctx.set_content_type(veb.mime_types['.svg'])
+	ctx.set_header(.expires, tomorrow.utc_string())
+	ctx.set_header(.cache_control, 'public')
 	return ctx.text(stats_svg)
 }

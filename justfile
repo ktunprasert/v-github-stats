@@ -2,8 +2,11 @@ alias b := build
 alias r := run
 alias c := clear
 alias d := dev
+alias dp := deploy
 
 flags := "-d use_openssl"
+
+set dotenv-load := true
 
 # flag only required for linux builds
 default:
@@ -25,3 +28,7 @@ run:
 
 clear:
     rm public/*.svg
+
+deploy:
+    @echo $TARGET
+    scp ./main $TARGET

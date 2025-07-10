@@ -5,6 +5,7 @@ import log
 fn request_logger(mut ctx Ctx) bool {
 	log.info('ctx.request.query: ${ctx.query}')
 	log.info('ctx.request.url: ${ctx.req.host}${ctx.req.url}')
+
 	return true
 }
 
